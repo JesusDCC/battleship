@@ -1,5 +1,5 @@
 #include<stdio.h>
-
+#include"boats.h"
 struct _Boat {
 	enum{
 		ONE,
@@ -12,7 +12,6 @@ struct _Boat {
 	int cells;
 	int matrixSize;
 	int boatMatrix[41][41];
-
 };
 
 struct _Cell {
@@ -73,14 +72,13 @@ Cell* createCell();
 //used to test if it's printing right
 void testShot(GameMap* map, int x, int y);
 
-//boatPlacing manual = 1, random = 2
-void createBoats(GameMap* map);
-
 //print the boat in a matrix
 void printBoat(Boat* boat);
 
-//choose the rotation and call moveLoop
-void placeBoat(GameMap* map, Boat* boat);
+//random number generator
+int randomm(int lower, int upper);
+
+
 
 //shows the map with the boats in it
 void showMapBoats(GameMap* map);
@@ -88,11 +86,26 @@ void showMapBoats(GameMap* map);
 double coss(int angle);
 double sinn(int angle);
 
-//moves the boat to the direction in the boatMatrix
-int moveBoat(Boat* boat, int direction);
+
 
 //set all array values to 0
 void setArrayZero(int array[41][41]);
+
+int shoot(GameMap* map, int x, int y);
+
+
+int checkWinner(User* user);
+
+
+//boatPlacing manual = 1, random = 2
+void createBoats(GameMap* map);
+
+void userBoats(User* user);
+
+
+//choose the rotation and call moveLoop
+void placeBoat(GameMap* map, Boat* boat);
+
 
 //verifies if boat can be placed, if not it calls moveloop again
 void placeInMap(GameMap* map, Boat* boat);
@@ -100,19 +113,17 @@ void placeInMap(GameMap* map, Boat* boat);
 //verifies if there are boats near the boat we want to place
 int near(GameMap* map, Boat* boat);
 
+
 //makes the rotation
 void rotation(Boat* boat,int angle);
+
+//moves the boat to the direction in the boatMatrix
+int moveBoat(Boat* boat, int direction);
 
 //the move options loop, calls palceInMap
 void moveLoop(GameMap* map, Boat* boat);
 
-//random number generator
-int randomm(int lower, int upper);
-
 void makeRandomMoves(GameMap* map, Boat* boat);
 
-int shoot(GameMap* map, int x, int y);
+void setBoatMatrix(Boat* boat,int boatM[5][5]);
 
-void userBoats(User* user);
-
-int checkWinner(User* user);
