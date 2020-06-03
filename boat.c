@@ -1,7 +1,15 @@
 #include"boat.h"
-#include "print.c"
-#include"auxFunctions.c"
+#include<math.h>
+#include <stdlib.h> // for malloc
+#include <time.h>
 #include"boats.h"
+#include <unistd.h>
+
+int structMode;
+
+void defineGlobalBoat(int var){
+	structMode = var;
+}
 
 int boatPlacing;
 
@@ -87,28 +95,48 @@ void placeBoat(GameMap* map, Boat* boat){
 
 void placeInMap(GameMap* map, Boat* boat){
 	int size = map->size;
-	Matrix* matrix = map->tab;
 	for(int k=size;k>=1;k--){
 		for(int i=1;i<=size;i++	){
-			Cell* cell = matrix->cell[i][k];
+			Cell* cell = getCell(map,i,k);
 			if(boat->boatMatrix[i][k]==1){
-				if(cell->boat!=NULL || near(map,boat)==0){
-					if(boatPlacing==1){
-						printf("Invalid location! Choose another location\n");
-						moveLoop(map,boat);	
-					}
-					else{
-						makeRandomMoves(map,boat);
-					}
-					return;
+				if(cell!=NULL){
+						if(cell->boat!=NULL || near(map,boat)==0){
+							if(boatPlacing==1){
+								printf("Invalid location! Choose another location\n");
+								moveLoop(map,boat);	
+							}
+							else{
+								makeRandomMoves(map,boat);
+							}
+							return;
+						}
 				}
+				else {
+					if(near(map,boat)==0){
+						if(boatPlacing==1){
+								printf("Invalid location! Choose another location\n");
+								moveLoop(map,boat);	
+							}
+							else{
+								makeRandomMoves(map,boat);
+							}
+							return;
+					}
+				}
+
 			}
 		}
 	}
 	for(int k=size;k>=1;k--){
 		for(int i=1;i<=size;i++	){
-			Cell* cell = matrix->cell[i][k];
+			Cell* cell = getCell(map,i,k);
 			if(boat->boatMatrix[i][k]==1){
+				//Cell can only be null if we're working with quadtree, so getCell isn't needed
+				if(cell==NULL){
+					insert(map->val.qt->root,i,k,createCell());
+					cell = lookup(map->val.qt->root,i,k);
+				}
+
 				cell->boat = boat;
 				cell->shot=1;
 			}
@@ -119,25 +147,34 @@ void placeInMap(GameMap* map, Boat* boat){
 //returns 0 if the boat is near other boat(adjacent), 1 if it isnt
 int near(GameMap* map, Boat* boat){
 	int size = map->size;
-	Matrix* matrix = map->tab;
 	for(int k=size;k>=1;k--){
 		for(int i=1;i<=size;i++	){
 			if(boat->boatMatrix[i][k]==1){
 				if(k+1<=map->size){
-					Cell* cellUp = matrix->cell[i][k+1];
-					if(cellUp->boat!=NULL) return 0;
+					Cell* cellUp = getCell(map,i,k+1);
+					if(cellUp!=NULL){
+						if(cellUp->boat!=NULL) return 0;
+					}
+
 				}
 				if(k-1>=1){
-					Cell* cellDown = matrix->cell[i][k-1];
-					if(cellDown->boat!=NULL) return 0;
+					Cell* cellDown = getCell(map,i,k-1);
+					if(cellDown!=NULL){
+						if(cellDown->boat!=NULL) return 0;
+					}
 				}
 				if(i-1>=1){
-					Cell* cellLeft = matrix->cell[i-1][k];
-					if(cellLeft->boat!=NULL) return 0;
+					Cell* cellLeft = getCell(map,i-1,k);
+					if(cellLeft!=NULL){
+						if(cellLeft->boat!=NULL) return 0;
+					}
 				}
 				if(i+1<=map->size){
-					Cell* cellRight = matrix->cell[i+1][k];
-					if(cellRight->boat!=NULL) return 0;
+					Cell* cellRight = getCell(map,i+1,k);
+					if(cellRight!=NULL){
+						if(cellRight->boat!=NULL) return 0;
+					}
+
 				}
 
 			}
@@ -312,3 +349,57 @@ void setBoatMatrix(Boat* boat,int boatM[5][5]){
 	}
 }
 
+void printBoat(Boat* boat){
+	int size = boat->matrixSize;
+	for(int k=size;k>=1;k--){
+		for(int i=1;i<=size;i++){
+			if(boat->boatMatrix[i][k]==1){
+				printf("_");
+				printf("X");
+				printf("_");
+			}
+			else{
+				printf("___");
+			}
+			printf("|");
+
+		}
+		printf("\n");
+	}
+}
+
+void showMapBoats(GameMap* map){
+	int size = map->size;
+	for(int k=size;k>=1;k--){
+		for(int i=1;i<=size;i++	){
+			Cell* cell = getCell(map,i,k);
+			if(cell!=NULL){
+				if(cell->boat!=NULL){
+				printf("_");
+				printf("X");
+				printf("_");
+				}
+				else{
+					printf("___");
+				}
+			}
+			else{
+				printf("___");
+			}
+			
+			printf("|");
+		}
+		printf("\n");
+	}
+}
+
+Cell* getCell(GameMap* map,int x, int y){
+	Cell* cell;
+	if(structMode==1){
+		cell = lookup(map->val.tab,x,y);
+	}
+	else{
+		cell = lookup(map->val.qt->root,x,y);
+	}
+	return cell;
+}

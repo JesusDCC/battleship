@@ -1,11 +1,10 @@
 #include<stdio.h>
 #include<math.h>
 #include <stdlib.h> // for malloc
-#include "battleship.h"
 #include <time.h>
 #include <unistd.h>
-#include "boat.c"
-#include "gamePlay.c"
+#include"gamePlay.h"
+
 
 #define SIZEMIN 20
 #define SIZEMAX 40
@@ -20,12 +19,10 @@ int boatPlacing;
 int main(int argc, char *argv[]) {
 	int stop=0;
 	while(stop!=1){
-		printf("Choose game structure mode!\n1)Matrix\n2)QuadTree\n");
-		scanf("%d", &structMode);
-		while(!verifyInput(1,2,structMode)){
-			scanf("%d", &structMode);
-			defineGlobal(structMode);
-		}
+		structMode = getStructMode();
+		defineGlobal(structMode);
+		defineGlobalBoat(structMode);
+		defineGlobalGp(structMode);
 		printf("Define square size! (Between 20 and 40)\n");
 		int size;
 		scanf("%d", &size);
@@ -118,25 +115,24 @@ User* newUser(int size){
 }
 
 GameMap* createMap(int size){
+	GameMap* map = (GameMap*) malloc(sizeof(GameMap));
 	switch(structMode){
 		case 1:
 			;//empty satement for switch to work
-			GameMap* map = (GameMap*) malloc(sizeof(GameMap));
 			map->kind = MATRIX;
 			map->size=size;
-			map->tab = createMatrix(size,turn);
-			return map;
+			void* pointerM = init(size,turn);
+			map->val.tab = (Matrix*)pointerM;
+			break;
 		case 2:
-			;//empty statement for switch to work
-			//CODE TO CREATE MAP WITH QUADTREE
+			;
+			map->kind = QUADTREE;
+			map->size = size;
+			void* pointerQ = init(size,turn);
+			map->val.qt = (QuadTree*)pointerQ;
 			break;
 	}
+	
 }
 
-Cell* createCell(){
-	Cell* cell = (Cell*) malloc(sizeof(Cell));
-	cell->boat = NULL;
-	cell->shot=0;
-	return cell;
-}
 

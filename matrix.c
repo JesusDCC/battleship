@@ -1,6 +1,16 @@
-#include "matrix.h"
+#include "gameStruct.h"
+#include <stdlib.h> // for malloc
 
-Matrix* createMatrix(int size,int turn){
+
+int getStructMode(){
+	return 1;
+}
+
+void insert(void* root,int x,int y,Cell* cell){
+	return;
+};
+
+void* init(int size,int turn){
 	Matrix* tab = (Matrix*) malloc(sizeof(Matrix));
  	tab->player = turn;
 	for(int k=1;k<=size;k++){
@@ -9,4 +19,9 @@ Matrix* createMatrix(int size,int turn){
 		}
 	}
 	return tab;
+}
+
+Cell* lookup(void* matrixVoid,int x,int y){
+	Matrix* matrix = (Matrix*)matrixVoid;
+	return matrix->cell[x][y];
 }

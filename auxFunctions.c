@@ -1,4 +1,9 @@
+#include<stdio.h>
 #include"auxFunctions.h"
+#include<math.h>
+#include <stdlib.h> // for malloc
+#include <time.h>
+#include <unistd.h>
 
 int verifyInput(int min, int max, int input){
 	if(input <= max && input >= min) return 1;

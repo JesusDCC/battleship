@@ -1,3 +1,10 @@
+#ifndef _boat_h_
+#define _boat_h_
+
+#include"auxFunctions.h"
+#include "battleship.h"
+
+
 
 struct _Boat {
 	enum{
@@ -64,3 +71,17 @@ void makeRandomMoves(GameMap* map, Boat* boat);
 place the boat defined in boats.h by a [5][5] matrix in the boatMatrix[41][41]  
 */
 void setBoatMatrix(Boat* boat,int boatM[5][5]);
+
+void printBoat(Boat* boat);
+
+/**
+Prints the map with all boats on it
+*/
+void showMapBoats(GameMap* map);
+
+void defineGlobalBoat(int var);
+
+//Getter for the cell, depending on structure used
+Cell* getCell(GameMap* map,int x, int y);
+
+#endif

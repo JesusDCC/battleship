@@ -1,10 +1,7 @@
+#ifndef _battleship_h_
+#define _battleship_h_
 #include<stdio.h>
-
-struct _Cell {
-	struct _Boat* boat;
-	int shot;
-};
-
+#include"gameStruct.h"
 
 struct _GameMap {
 	enum{
@@ -13,9 +10,9 @@ struct _GameMap {
 	}kind;
 	int size;
 	union{
-		//struct _QuadTree* root;
-		struct _Matrix* tab;	
-	};
+		QuadTree* qt;
+		Matrix* tab;	
+	}val;
 };	
 
 struct _User {
@@ -28,7 +25,6 @@ typedef
 typedef struct _User User;
 typedef struct _GameMap GameMap;
 //typedef struct _QuadTree QuadTree;
-typedef struct _Cell Cell;
 
 /**
 Calls createBoats and showMapBoats after all boats got placed
@@ -46,7 +42,6 @@ Creates the map, depending on the structure choosen
 */
 GameMap* createMap(int size);
 
-Cell* createCell();
 
 
-
+#endif
