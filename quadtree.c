@@ -2,6 +2,7 @@
 #include <stdlib.h> // for malloc
 #include<stdio.h>
 
+//returns 2 because gamestruct == 2 means that it's working with quadtree structure
 int getStructMode(){
 	return 2;
 }
@@ -33,7 +34,7 @@ void* init(int size, int player){
 	return quadTree;
 } 
 
-
+//the cell argument is used to re insert the point that was already in the node
 void insert(void* nodeVoid, int x, int y, Cell* cell){
 	QuadTreeNode* node = (QuadTreeNode*) nodeVoid;
 	Point* p = makePoint(x,y);
@@ -79,7 +80,7 @@ void insert(void* nodeVoid, int x, int y, Cell* cell){
 }
 
 
-
+//change kind from leaf to node and subdivide
 void subdivide(QuadTreeNode* node){
 	Rectangle* boundary = node->boundary;
 	float x = boundary->x;

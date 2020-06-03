@@ -1,7 +1,7 @@
 #include "gameStruct.h"
 #include <stdlib.h> // for malloc
 
-
+//returns 1 because gamestruct == 1 means that it's working with matrix structure
 int getStructMode(){
 	return 1;
 }

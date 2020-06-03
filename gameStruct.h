@@ -44,13 +44,19 @@ struct _QuadTreeNode {
 		}leaf;
 	}node;
 };
-
+//get the structure (matrix/quadtree)
 int getStructMode();
+//insert a new Point in the quadtree / does nothing with matrix
 void insert(void* node, int x,int y, Cell* cell);
+//subdivide a leaf node in the quadtree
 void subdivide(QuadTreeNode* node);
+//create a node with a given boundary 
 QuadTreeNode* createNode(Rectangle* bounds);
+//create the boundary 
 Rectangle* createRectangle(float x,float y, float w, float h);
+//create a Point
 Point* makePoint(float x, float y);
+//check if the point given is inside the node boundary
 int contains(QuadTreeNode* node, Point* p);
 int equalPoints(Point* one, Point* two);
 Cell* lookup(void* root, int x,int y);
